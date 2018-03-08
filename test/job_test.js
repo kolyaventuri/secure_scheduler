@@ -21,6 +21,6 @@ describe('Job', () => {
   });
 
   it('should be able to run method', () => {
-    expect(job.execute).to.equal(4);
+    expect(job.execute()).to.equal(4);
   });
 });
