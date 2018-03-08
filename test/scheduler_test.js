@@ -29,12 +29,12 @@ describe('Scheduler', () => {
   });
 
   it('should be able to schedule jobs', () => {
-    let job = scheduler.add(() => {}, new Date());
+    let job = scheduler.add(new Job(() => {}, new Date()));
 
     expect(job).to.be.an.instanceOf(Job);
     expect(scheduler.schedule.length).to.equal(1);
 
-    let job2 = scheduler.add(() => {}, new Date());
+    let job2 = scheduler.add(new Job(() => {}, new Date()));
 
     expect(job2).to.be.an.instanceOf(Job);
     expect(scheduler.schedule.length).to.equal(2);
@@ -54,6 +54,7 @@ describe('Scheduler', () => {
   });
 
   after(() => {
+    fs.unlinkSync(filePath);
     fs.rmdirSync(dirPath);
     fs.access(dirPath, err => {
       expect(!!err).to.be.true;
