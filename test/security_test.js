@@ -1,12 +1,13 @@
 require('./test_helper');
 
 const Security = require('../lib/security');
+const Job = require('../lib/job');
 
 describe('Security', () => {
   let security = new Security();
   it('should be able to serialize an array of functions', () => {
 
-    let func = (a) => { console.log(a); };
+    let func = (a) => { return a; };
     let date = new Date();
 
     let input = [
@@ -18,7 +19,7 @@ describe('Security', () => {
 
     let expected = [
       {
-        method: '(a) => { console.log(a); }',
+        method: '(a) => { return a; }',
         date: date.toString()
       }
     ];
@@ -33,17 +34,25 @@ describe('Security', () => {
 
     let input = [
       {
-        method: '(a) => { console.log(a); }',
+        method: '(a) => { return a; }',
+        date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
+      },
+      {
+        method: '2*2',
         date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
       }
     ];
 
     let output = security.unboxFunctions(input);
 
-    expect(input[0].method).to.be.a('function');
-    expect(input[0].date).to.equal(date);
+    for(let job of output) {
+      expect(job).to.be.an.instanceOf(Job);
+      expect(job.method).to.be.a('function');
+      expect(job.date).to.eql(date);
+    }
 
-    expect(input[0].method(4)).to.equal(4);
+    expect(output[0].execute('x')).to.equal('x');
+    expect(output[1].execute()).to.equal(4);
   });
 
   it('should unbox functions securely', () => {
@@ -55,7 +64,6 @@ describe('Security', () => {
     ];
 
     let output = security.unboxFunctions(input);
-    expect(input[0].method).to.be.a('function');
 
     expect(input[0].method('index.html')).to.not.equal('.html');
   });
