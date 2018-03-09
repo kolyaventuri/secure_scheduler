@@ -32,4 +32,12 @@ describe('Job', () => {
 
     expect(job.execute()).to.not.equal('.html');
   });
+
+  it('should reject non-date strings', () => {
+    let createJob = () => {
+      new Job(() => {}, "notadate");
+    };
+
+    expect(createJob).to.throw(TypeError);
+  });
 });
