@@ -36,7 +36,7 @@ describe('Security', () => {
   it('should be able to unbox functions', () => {
     let date = new Date('Fri Mar 09 2018 10:04:58 GMT-0600 (CST)');
 
-    let input = {
+    let input = JSON.stringify({
       schedule: [
         {
           method: '(a) => { return a; }',
@@ -47,10 +47,12 @@ describe('Security', () => {
           date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
         }
       ]
-    };
+    });
 
     let output = security.unboxFunctions(input);
-
+    expect(output.schedule).to.be.an('array');
+    
+    output = output.schedule;
     for(let job of output) {
       expect(job).to.be.an.instanceOf(Job);
       expect(job.method).to.be.a('function');
@@ -62,14 +64,14 @@ describe('Security', () => {
   });
 
   it('should unbox functions securely', () => {
-    let input = {
+    let input = JSON.stringify({
       schedule: [
         {
           method: '(a) => { let path = require("path"); return path.extname(a); }',
           date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
         }
       ]
-    };
+    });
 
     let output = security.unboxFunctions(input);
 
