@@ -43,6 +43,7 @@ describe('Scheduler', () => {
   it('should be able to load jobs', () => {
     let _scheduler = new Scheduler(filePath);
     expect(scheduler.schedule.length).to.equal(2);
+    expect(scheduler.schedule[0].method).to.be.a('function');
   });
 
   afterEach(() => {
