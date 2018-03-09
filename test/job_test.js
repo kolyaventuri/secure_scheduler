@@ -13,9 +13,11 @@ describe('Job', () => {
     expect(job).to.be.an.instanceOf(Job);
   });
 
-  it('should have a method and a date', () => {
+  it('should have a method, date, and id', () => {
     expect(job.method).to.be.an.instanceOf(Function);
     expect(job.date).to.be.an.instanceOf(Date);
+    expect(job.id).to.be.a('string');
+    expect(job.id).to.have.lengthOf(36);
 
     expect(job.date).to.equal(date);
   });
