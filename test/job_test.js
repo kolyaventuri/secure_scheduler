@@ -1,4 +1,4 @@
-require('./test_helper')
+require('./test_helper');
 
 const Job = require('../lib/job');
 
@@ -22,5 +22,14 @@ describe('Job', () => {
 
   it('should be able to run method', () => {
     expect(job.execute()).to.equal(4);
+  });
+
+  it('should be sandboxed in a VM', () => {
+    let _job = new Job(() => {
+      console.log(require('path'));
+      return 4;
+    });
+
+    expect(job.execute()).to.throw();
   });
 });
