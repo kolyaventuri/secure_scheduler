@@ -26,10 +26,10 @@ describe('Job', () => {
 
   it('should be sandboxed in a VM', () => {
     let _job = new Job(() => {
-      console.log(require('path'));
-      return 4;
-    });
+      let path = require('path');
+      return path.extname('index.html');
+    }, date);
 
-    expect(job.execute()).to.throw();
+    expect(job.execute()).to.not.equal('.html');
   });
 });
