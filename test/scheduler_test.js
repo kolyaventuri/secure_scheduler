@@ -29,12 +29,12 @@ describe('Scheduler', () => {
   });
 
   it('should be able to schedule jobs', () => {
-    let job = scheduler.add(new Job(() => {}, new Date()));
+    let job = scheduler.add(() => {}, new Date());
 
     expect(job).to.be.an.instanceOf(Job);
     expect(scheduler.schedule.length).to.equal(1);
 
-    let job2 = scheduler.add(new Job(() => {}, new Date()));
+    let job2 = scheduler.add(() => {}, new Date());
 
     expect(job2).to.be.an.instanceOf(Job);
     expect(scheduler.schedule.length).to.equal(2);

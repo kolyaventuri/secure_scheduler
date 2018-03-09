@@ -42,4 +42,10 @@ describe('Job', () => {
 
     expect(createJob).to.throw(TypeError);
   });
+
+  it('should be able to accept pre-existing id', () => {
+    let _job = new Job(() => {}, new Date(), '1');
+
+    expect(_job.id).to.equal('1');
+  })
 });
