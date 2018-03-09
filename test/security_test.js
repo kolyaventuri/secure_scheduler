@@ -65,6 +65,6 @@ describe('Security', () => {
 
     let output = security.unboxFunctions(input);
 
-    expect(output[0].execute('index.html')).to.throw();
+    expect(() => { output[0].execute('index.html'); }).to.throw();
   });
 });
