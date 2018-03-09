@@ -19,8 +19,12 @@ describe('Scheduler', () => {
       fs.access(dirPath, err => {
         expect(!!err).to.be.false;
       });
+  });
 
-      scheduler = new Scheduler(filePath);
+  beforeEach(() => {
+    scheduler = new Scheduler(filePath);
+    date = new Date();
+    date.setDate(date.getDate() + 1);
   });
 
   it('should start with an empty database', () => {
@@ -29,12 +33,11 @@ describe('Scheduler', () => {
   });
 
   it('should be able to schedule jobs', () => {
-    let job = scheduler.add(() => {}, new Date());
-
+    let job = scheduler.add(() => {}, date);
     expect(job).to.be.an.instanceOf(Job);
     expect(scheduler.schedule).to.have.lengthOf(1);
 
-    let job2 = scheduler.add(() => {}, new Date());
+    let job2 = scheduler.add(() => {}, date);
 
     expect(job2).to.be.an.instanceOf(Job);
     expect(scheduler.schedule).to.have.lengthOf(2);
@@ -42,24 +45,28 @@ describe('Scheduler', () => {
 
   it('should be able to load jobs', () => {
     let _scheduler = new Scheduler(filePath);
-    expect(scheduler.schedule).to.have.lengthOf(2);
-    expect(scheduler.schedule[0].method).to.be.a('function');
+    _scheduler.add(() => {}, date);
+    _scheduler.add(() => {}, date);
+
+    let _scheduler2 = new Scheduler(filePath);
+    expect(_scheduler2.schedule).to.have.lengthOf(2);
+    expect(_scheduler2.schedule[0].method).to.be.a('string');
   });
 
   it('should register jobs', () => {
-    let job = scheduler.add(() => {}, new Date());
+    let job = scheduler.add(() => {}, date);
 
     expect(scheduler.jobs).to.have.lengthOf(1);
     expect(scheduler.jobs).to.include(job.id);
 
-    job = scheduler.add(() => {}, new Date());
+    job = scheduler.add(() => {}, date);
 
     expect(scheduler.jobs).to.have.lengthOf(2);
     expect(scheduler.jobs).to.include(job.id);
   });
 
   it('should be able to cancel jobs', () => {
-    let job = scheduler.add(() => {}, new Date());
+    let job = scheduler.add(() => {}, date);
 
     expect(scheduler.jobs).to.have.lengthOf(1);
     expect(scheduler.jobs).to.include(job.id);
@@ -76,10 +83,14 @@ describe('Scheduler', () => {
         fs.unlinkSync(tempFilePath);
       }
     });
+    fs.access(filePath, err => {
+      if(!err) {
+        fs.unlinkSync(filePath);
+      }
+    });
   });
 
   after(() => {
-    fs.unlinkSync(filePath);
     fs.rmdirSync(dirPath);
     fs.access(dirPath, err => {
       expect(!!err).to.be.true;
