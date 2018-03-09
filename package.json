@@ -1,5 +1,5 @@
 {
-  "name": "secure_scheduler",
+  "name": "secure-scheduler",
   "version": "1.0.0",
   "description": "",
   "main": "lib/scheduler.js",
