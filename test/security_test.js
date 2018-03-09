@@ -10,38 +10,44 @@ describe('Security', () => {
     let func = (a) => { return a; };
     let date = new Date();
 
-    let input = [
-      {
-        method: func,
-        date: date
-      }
-    ];
+    let input = {
+      schedule: [
+        {
+          method: func,
+          date: date
+        }
+      ]
+    };
 
-    let expected = [
-      {
-        method: '(a) => { return a; }',
-        date: date.toString()
-      }
-    ];
+    let expected = {
+      schedule: [
+        {
+          method: '(a) => { return a; }',
+          date: date.toString()
+        }
+      ]
+    };
 
     let output = security.serializeFunctions(input);
 
-    expect(output).to.eql(expected);
+    expect(output).to.eql(JSON.stringify(expected));
   });
 
   it('should be able to unbox functions', () => {
     let date = new Date('Fri Mar 09 2018 10:04:58 GMT-0600 (CST)');
 
-    let input = [
-      {
-        method: '(a) => { return a; }',
-        date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
-      },
-      {
-        method: '2*2',
-        date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
-      }
-    ];
+    let input = {
+      schedule: [
+        {
+          method: '(a) => { return a; }',
+          date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
+        },
+        {
+          method: '2*2',
+          date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
+        }
+      ]
+    };
 
     let output = security.unboxFunctions(input);
 
@@ -56,12 +62,14 @@ describe('Security', () => {
   });
 
   it('should unbox functions securely', () => {
-    let input = [
-      {
-        method: '(a) => { let path = require("path"); return path.extname(a); }',
-        date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
-      }
-    ];
+    let input = {
+      schedule: [
+        {
+          method: '(a) => { let path = require("path"); return path.extname(a); }',
+          date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)'
+        }
+      ]
+    };
 
     let output = security.unboxFunctions(input);
 
