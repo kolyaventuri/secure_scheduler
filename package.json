@@ -1,5 +1,5 @@
 {
-  "name": "twitter_scheduler",
+  "name": "secure_scheduler",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,10 +11,16 @@
     "test": "mocha"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Kolya Venturi",
+    "email": "kolya.venturi@enx3s.com",
+    "url": "https://kolya.co/"
+  },
+  "repository": "github:kolyaventuri/secure_scheduler",
   "license": "ISC",
   "dependencies": {
     "lowdb": "^1.0.0",
+    "node-schedule": "^1.3.0",
     "vm2": "^3.5.2"
   },
   "devDependencies": {
