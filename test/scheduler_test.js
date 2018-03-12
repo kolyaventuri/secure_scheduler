@@ -86,6 +86,24 @@ describe('Scheduler', () => {
     expect(_scheduler.vm_opts).to.eql(expected);
   });
 
+  it('should be able to add jobs with custom NodeVM argument', () => {
+    let job = scheduler.add(() => {
+        let path = require('path');
+        return path.extname('index.html');
+      },
+      date,
+      {
+        require: {
+          builtin: ['path']
+        }
+      }
+    );
+    expect(job).to.be.an.instanceOf(Job);
+    expect(scheduler.schedule).to.have.lengthOf(1);
+
+    expect(job.execute()).to.equal('.html');
+  });
+
   afterEach(() => {
     fs.access(tempFilePath, err => {
       if(!err) {
