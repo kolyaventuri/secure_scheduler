@@ -10,7 +10,15 @@
   "scripts": {
     "test": "mocha"
   },
-  "keywords": [],
+  "keywords": [
+    "scheduler",
+    "schedule",
+    "security",
+    "virtualization",
+    "timer",
+    "cron",
+    "cron job"
+  ],
   "author": {
     "name": "Kolya Venturi",
     "email": "kolya.venturi@enx3s.com",
