@@ -77,6 +77,15 @@ describe('Scheduler', () => {
     expect(scheduler.schedule).to.have.lengthOf(0);
   });
 
+  it('should be able to take an argument of NodeVM options', () => {
+    expect(scheduler.vm_opts).to.be.null;
+
+    let _scheduler = new Scheduler(tempFilePath, {success: true});
+    let expected = {success: true};
+
+    expect(_scheduler.vm_opts).to.eql(expected);
+  });
+
   afterEach(() => {
     fs.access(tempFilePath, err => {
       if(!err) {
