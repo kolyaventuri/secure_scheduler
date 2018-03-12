@@ -117,10 +117,16 @@ describe('Security', () => {
 
     let output = security.unboxFunctions(input);
 
-    expect(() => { output[0].execute('index.html'); }).to.throw();
+    expect(() => { output.schedule[0].execute('index.html'); }).to.throw();
   });
 
   it('should be able to unbox functions with NodeVM opts', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
     let input = JSON.stringify({
       schedule: [
         {
@@ -134,6 +140,6 @@ describe('Security', () => {
 
     let output = security.unboxFunctions(input);
 
-    expect(output[0].execute()).to.equal('index.html');
+    expect(output.schedule[0].execute()).to.equal('.html');
   });
 });
