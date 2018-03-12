@@ -35,6 +35,41 @@ describe('Security', () => {
     expect(output).to.eql(JSON.stringify(expected));
   });
 
+  it('should be able to serialize an array of functions with NodeVM opts', () => {
+    let date = new Date();
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let input = {
+      schedule: [
+        {
+          method: () => { let path = require('path'); return path.extname('index.html'); },
+          date: date,
+          id: 'test',
+          vm_opts: opts
+        }
+      ]
+    };
+
+    let expected = {
+      schedule: [
+        {
+          method: "() => { let path = require('path'); return path.extname('index.html'); }",
+          date: date.toString(),
+          id: 'test',
+          vm_opts: opts
+        }
+      ]
+    };
+
+    let output = security.serializeFunctions(input);
+
+    expect(output).to.eql(JSON.stringify(expected));
+  });
+
   it('should be able to unbox functions', () => {
     let date = new Date('Fri Mar 09 2018 10:04:58 GMT-0600 (CST)');
 
@@ -83,5 +118,22 @@ describe('Security', () => {
     let output = security.unboxFunctions(input);
 
     expect(() => { output[0].execute('index.html'); }).to.throw();
+  });
+
+  it('should be able to unbox functions with NodeVM opts', () => {
+    let input = JSON.stringify({
+      schedule: [
+        {
+          method: "() => { let path = require('path'); return path.extname('index.html'); }",
+          date: 'Fri Mar 09 2018 10:04:58 GMT-0600 (CST)',
+          id: 'test',
+          vm_opts: opts
+        }
+      ]
+    });
+
+    let output = security.unboxFunctions(input);
+
+    expect(output[0].execute()).to.equal('index.html');
   });
 });
