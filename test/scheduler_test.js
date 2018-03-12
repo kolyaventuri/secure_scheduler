@@ -53,6 +53,24 @@ describe('Scheduler', () => {
     expect(_scheduler2.schedule[0].method).to.be.a('string');
   });
 
+  it('should be able to save/load jobs with NodeVM options by default', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let _scheduler = new Scheduler(filePath);
+    _scheduler.add(() => {
+      let path = require('path');
+      return path.extname('index.html');
+    }, date, opts);
+
+    let _scheduler2 = new Scheduler(filePath);
+    expect(_scheduler2.schedule).to.have.lengthOf(1);
+    expect(_scheduler2.schedule[0].vm_opts).to.eql(opts);
+  });
+
   it('should register jobs', () => {
     let job = scheduler.add(() => {}, date);
 
