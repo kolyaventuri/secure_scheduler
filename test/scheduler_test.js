@@ -71,6 +71,37 @@ describe('Scheduler', () => {
     expect(_scheduler2.schedule[0].vm_opts).to.eql(opts);
   });
 
+  it('should overwrite default NodeVM opts with custom ones', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let default_opts = {
+      require: {
+        builtin: ['fs']
+      }
+    };
+
+    let _scheduler = new Scheduler(tempFilePath);
+
+    let job = _scheduler.add(() => {
+        let path = require('path');
+        return path.extname('index.html');
+      },
+      date,
+      opts
+    );
+
+    _scheduler.add(() => {}, date);
+
+    expect(_scheduler.schedule).to.have.lengthOf(2);
+
+    expect(_scheduler.schedule[0].vm_opts).to.eql(opts);
+    expect(_scheduler.schedule[1].vm_opts).to.be.undefined;
+  });
+
   it('should register jobs', () => {
     let job = scheduler.add(() => {}, date);
 
