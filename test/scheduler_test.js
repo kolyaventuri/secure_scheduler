@@ -53,6 +53,55 @@ describe('Scheduler', () => {
     expect(_scheduler2.schedule[0].method).to.be.a('string');
   });
 
+  it('should be able to save/load jobs with NodeVM options by default', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let _scheduler = new Scheduler(filePath);
+    _scheduler.add(() => {
+      let path = require('path');
+      return path.extname('index.html');
+    }, date, opts);
+
+    let _scheduler2 = new Scheduler(filePath);
+    expect(_scheduler2.schedule).to.have.lengthOf(1);
+    expect(_scheduler2.schedule[0].vm_opts).to.eql(opts);
+  });
+
+  it('should overwrite default NodeVM opts with custom ones', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let default_opts = {
+      require: {
+        builtin: ['fs']
+      }
+    };
+
+    let _scheduler = new Scheduler(tempFilePath);
+
+    let job = _scheduler.add(() => {
+        let path = require('path');
+        return path.extname('index.html');
+      },
+      date,
+      opts
+    );
+
+    _scheduler.add(() => {}, date);
+
+    expect(_scheduler.schedule).to.have.lengthOf(2);
+
+    expect(_scheduler.schedule[0].vm_opts).to.eql(opts);
+    expect(_scheduler.schedule[1].vm_opts).to.be.undefined;
+  });
+
   it('should register jobs', () => {
     let job = scheduler.add(() => {}, date);
 
@@ -75,6 +124,33 @@ describe('Scheduler', () => {
 
     expect(scheduler.jobs).to.have.lengthOf(0);
     expect(scheduler.schedule).to.have.lengthOf(0);
+  });
+
+  it('should be able to take an argument of NodeVM options', () => {
+    expect(scheduler.vm_opts).to.be.null;
+
+    let _scheduler = new Scheduler(tempFilePath, {success: true});
+    let expected = {success: true};
+
+    expect(_scheduler.vm_opts).to.eql(expected);
+  });
+
+  it('should be able to add jobs with custom NodeVM argument', () => {
+    let job = scheduler.add(() => {
+        let path = require('path');
+        return path.extname('index.html');
+      },
+      date,
+      {
+        require: {
+          builtin: ['path']
+        }
+      }
+    );
+    expect(job).to.be.an.instanceOf(Job);
+    expect(scheduler.schedule).to.have.lengthOf(1);
+
+    expect(job.execute()).to.equal('.html');
   });
 
   afterEach(() => {

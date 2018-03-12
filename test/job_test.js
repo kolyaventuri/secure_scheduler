@@ -47,5 +47,39 @@ describe('Job', () => {
     let _job = new Job(() => {}, new Date(), '1');
 
     expect(_job.id).to.equal('1');
-  })
+  });
+
+  it('should be able to take NodeVM options', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let _job = new Job(() => {
+      let path = require('path');
+      return path.extname('index.html');
+    }, new Date(), '1', opts);
+
+    expect(_job.vm_opts).to.eql(opts);
+
+    expect(_job.execute()).to.equal('.html');
+  });
+
+  it('should be able to take NodeVM options as the third argument', () => {
+    let opts = {
+      require: {
+        builtin: ['path']
+      }
+    };
+
+    let _job = new Job(() => {
+      let path = require('path');
+      return path.extname('index.html');
+    }, new Date(), opts);
+
+    expect(_job.vm_opts).to.eql(opts);
+
+    expect(_job.execute()).to.equal('.html');
+  });
 });
