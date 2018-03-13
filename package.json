@@ -1,6 +1,6 @@
 {
   "name": "secure-scheduler",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "",
   "main": "lib/scheduler.js",
   "directories": {
@@ -27,6 +27,7 @@
   "repository": "github:kolyaventuri/secure_scheduler",
   "license": "ISC",
   "dependencies": {
+    "cron-parser": "^2.4.5",
     "lowdb": "^1.0.0",
     "node-schedule": "^1.3.0",
     "uuid": "^3.2.1",
