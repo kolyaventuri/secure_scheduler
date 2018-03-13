@@ -35,12 +35,22 @@ describe('Job', () => {
     expect(job.execute()).to.not.equal('.html');
   });
 
-  it('should reject non-date strings', () => {
+  it('should be able to accept cron expressions in additions to dates', () => {
+    let _job = new Job(() => {}, '*/2 * * * *');
+
+    expect(_job.date).to.equal('*/2 * * * *');
+
+    expect(() => {
+      new Job(() => {}, '* * * * * 9');
+    }).to.throw();
+  });
+
+  it('should reject non-date/cron strings', () => {
     let createJob = () => {
       new Job(() => {}, "notadate");
     };
 
-    expect(createJob).to.throw(TypeError);
+    expect(createJob).to.throw();
   });
 
   it('should be able to accept pre-existing id', () => {
