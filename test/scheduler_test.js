@@ -41,6 +41,11 @@ describe('Scheduler', () => {
 
     expect(job2).to.be.an.instanceOf(Job);
     expect(scheduler.schedule).to.have.lengthOf(2);
+
+    let job3 = scheduler.add(() => {}, '0 0 1 1 *');
+
+    expect(job2).to.be.an.instanceOf(Job);
+    expect(scheduler.schedule).to.have.lengthOf(3);
   });
 
   it('should be able to load jobs', () => {
