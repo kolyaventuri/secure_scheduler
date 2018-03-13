@@ -16,7 +16,7 @@ const scheduler = new Scheduler('./jobs.json');
 
 where the parameter is the storage path for jobs.
 
-Functions can then be queued by passing a Function and Date to the Scheduler.add method
+Functions can then be queued by passing a Function and Date or cron expression to the Scheduler.add method
 ```
 scheduler.add(
   () => {
@@ -25,6 +25,16 @@ scheduler.add(
   new Date(2018, 06, 05)
 );
 // returns Job { method: . . ., date: Date, id: "job_id" }
+```
+
+Cron expressions are also valid in place of dates
+```
+scheduler.add(
+  () => {
+    // Do stuff
+  },
+  '*/30 * * * *'
+);
 ```
 
 Scheduler.add returns an _id_ (UUID-V1 formatted) to refer to the Job.
