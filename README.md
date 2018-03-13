@@ -27,7 +27,7 @@ scheduler.add(
 // returns Job { method: . . ., date: Date, id: "job_id" }
 ```
 
-Cron expressions are also valid in place of dates
+Cron expressions are also valid in place of fixed dates
 ```
 scheduler.add(
   () => {
