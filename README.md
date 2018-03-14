@@ -1,4 +1,5 @@
 # Secure Scheduler
+![Build Status](https://travis-ci.org/kolyaventuri/secure_scheduler.svg?branch=master)
 
 Secure scheduler is an easy to use module for scheduling events via end-user input using sandboxed method execution.
 
